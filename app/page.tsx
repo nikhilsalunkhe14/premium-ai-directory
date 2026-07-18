@@ -1,23 +1,12 @@
-import { getSupabase } from "@/lib/supabase";
+export const dynamic = "force-dynamic";
+
 import { MOCKUP_TOOLS, type Tool } from "@/lib/mockup-tools";
+import { getPublicTools } from "@/lib/public-tools";
 import HomePageContent from "@/components/HomePageContent";
 
 async function fetchTools(): Promise<Tool[]> {
-  const db = getSupabase();
-
-  if (!db) {
-    return MOCKUP_TOOLS;
-  }
-
-  const { data, error } = await db
-    .from("tools")
-    .select("id, name, category, description, pricing, website");
-
-  if (error || !data || data.length === 0) {
-    return MOCKUP_TOOLS;
-  }
-
-  return data;
+  const tools = await getPublicTools();
+  return tools.length > 0 ? tools : MOCKUP_TOOLS;
 }
 
 export default async function Home() {

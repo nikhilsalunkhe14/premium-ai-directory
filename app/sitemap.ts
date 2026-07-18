@@ -2,9 +2,10 @@ import type { MetadataRoute } from "next";
 import { getSupabase } from "@/lib/supabase";
 import { MOCKUP_TOOLS } from "@/lib/mockup-tools";
 
-const BASE_URL = "https://your-domain.com";
+const BASE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL || "https://your-domain.com";
 
-async function fetchToolIds(): Promise<string[]> {
+async function fetchToolSlugs(): Promise<string[]> {
   const db = getSupabase();
 
   if (db) {
@@ -13,7 +14,7 @@ async function fetchToolIds(): Promise<string[]> {
       .select("id");
 
     if (!error && data && data.length > 0) {
-      return data.map((row) => row.id);
+      return data.map((row) => String(row.id));
     }
   }
 
@@ -21,10 +22,10 @@ async function fetchToolIds(): Promise<string[]> {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const toolIds = await fetchToolIds();
+  const slugs = await fetchToolSlugs();
 
-  const toolEntries: MetadataRoute.Sitemap = toolIds.map((id) => ({
-    url: `${BASE_URL}/tools/${id}`,
+  const toolEntries: MetadataRoute.Sitemap = slugs.map((slug) => ({
+    url: `${BASE_URL}/tool/${slug}`,
     lastModified: new Date(),
     changeFrequency: "weekly",
     priority: 0.7,
@@ -36,6 +37,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 1.0,
+    },
+    {
+      url: `${BASE_URL}/tools`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/categories`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/blog`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/submit`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.5,
     },
     ...toolEntries,
   ];

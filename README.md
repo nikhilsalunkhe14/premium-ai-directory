@@ -29,6 +29,31 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
+## Environment Variables
+
+To enable SMTP and Supabase access, create a `.env.local` file in the project root with the following keys:
+
+```env
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_ANON_KEY=your-supabase-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
+
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_USER=your-smtp-username
+SMTP_PASS=your-smtp-password
+FROM_EMAIL=no-reply@yourdomain.com
+```
+
+### SMTP configuration
+- `SMTP_HOST`: the SMTP server host
+- `SMTP_PORT`: usually `587` for STARTTLS or `465` for SSL
+- `SMTP_USER`: login username for SMTP
+- `SMTP_PASS`: login password for SMTP
+- `FROM_EMAIL`: the sender email address used in notification emails
+
+Once these are set, submission approval/rejection emails will be sent automatically.
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
