@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
   const { data, error } = await supabase
     .from("tool_submissions")
     .select("id, name, website, category, pricing, description, email, affiliate_url, created_at, approved")
-    .neq("approved", true)
+    .is("approved", null)
     .order("created_at", { ascending: false })
     .limit(200);
 

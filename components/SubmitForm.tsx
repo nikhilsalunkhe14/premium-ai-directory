@@ -19,6 +19,8 @@ export default function SubmitForm() {
     pricing: "Free",
     description: "",
     email: "",
+    submitterName: "",
+    tags: "",
     affiliateUrl: "",
     websiteUrl: "",
   });
@@ -44,6 +46,8 @@ export default function SubmitForm() {
       pricing: formState.pricing,
       description: formState.description.trim(),
       email: formState.email.trim(),
+      submitterName: formState.submitterName.trim(),
+      tags: formState.tags.trim(),
       affiliateUrl: formState.affiliateUrl.trim(),
       honeypot: formState.websiteUrl.trim(),
     };
@@ -74,6 +78,8 @@ export default function SubmitForm() {
           pricing: "Free",
           description: "",
           email: "",
+          submitterName: "",
+          tags: "",
           affiliateUrl: "",
           websiteUrl: "",
         });
@@ -189,31 +195,59 @@ export default function SubmitForm() {
           />
         </label>
 
-        <label className="block">
-          <span className="text-sm font-semibold text-gray-900">Affiliate / Referral URL</span>
-          <input
-            name="affiliateUrl"
-            value={formState.affiliateUrl}
-            onChange={handleChange}
-            type="url"
-            maxLength={200}
-            className="mt-2 block w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-            placeholder="https://example.com/referral"
-          />
-        </label>
+        <div className="grid gap-6 sm:grid-cols-2">
+          <label className="block">
+            <span className="text-sm font-semibold text-gray-900">Submitter Name</span>
+            <input
+              name="submitterName"
+              value={formState.submitterName}
+              onChange={handleChange}
+              maxLength={80}
+              className="mt-2 block w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              placeholder="Alex Morgan"
+            />
+          </label>
 
-        <label className="block">
-          <span className="text-sm font-semibold text-gray-900">Your Email (optional)</span>
-          <input
-            name="email"
-            value={formState.email}
-            onChange={handleChange}
-            type="email"
-            maxLength={100}
-            className="mt-2 block w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-            placeholder="you@example.com"
-          />
-        </label>
+          <label className="block">
+            <span className="text-sm font-semibold text-gray-900">Your Email (optional)</span>
+            <input
+              name="email"
+              value={formState.email}
+              onChange={handleChange}
+              type="email"
+              maxLength={100}
+              className="mt-2 block w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              placeholder="you@example.com"
+            />
+          </label>
+        </div>
+
+        <div className="grid gap-6 sm:grid-cols-2">
+          <label className="block">
+            <span className="text-sm font-semibold text-gray-900">Tags</span>
+            <input
+              name="tags"
+              value={formState.tags}
+              onChange={handleChange}
+              maxLength={200}
+              className="mt-2 block w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              placeholder="writing, ai, content"
+            />
+          </label>
+
+          <label className="block">
+            <span className="text-sm font-semibold text-gray-900">Affiliate / Referral URL</span>
+            <input
+              name="affiliateUrl"
+              value={formState.affiliateUrl}
+              onChange={handleChange}
+              type="url"
+              maxLength={200}
+              className="mt-2 block w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              placeholder="https://example.com/referral"
+            />
+          </label>
+        </div>
 
         {status.type !== "idle" && (
           <div
@@ -231,7 +265,6 @@ export default function SubmitForm() {
           type="submit"
           disabled={loading}
           className="inline-flex w-full items-center justify-center rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-indigo-400"
-          onClick={() => console.log('submit clicked', formState)}
         >
           {loading ? "Submitting…" : "Submit Tool"}
         </button>

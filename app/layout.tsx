@@ -14,6 +14,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL || "https://premium-ai-directory-mu.vercel.app";
+
+export const metadataBase = new URL(BASE_URL);
+
 export const metadata: Metadata = {
   title:
     "The Ultimate Free AI Tools Directory | Discover Best AI Apps",
@@ -36,12 +40,21 @@ export const metadata: Metadata = {
       "Explore the largest curated directory of free AI tools. Find the best AI apps for writing, image generation, coding, productivity, and more.",
     type: "website",
     siteName: "AI Tools Directory",
+    images: [
+      {
+        url: `${BASE_URL}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: "Premium AI Directory — Discover best AI tools",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "The Ultimate Free AI Tools Directory | Discover Best AI Apps",
     description:
       "Explore the largest curated directory of free AI tools. Find the best AI apps for writing, image generation, coding, productivity, and more.",
+    images: [`${BASE_URL}/og-image.png`],
   },
   robots: {
     index: true,
@@ -70,6 +83,41 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+        <link rel="manifest" href="/manifest.json" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Premium AI Directory",
+              url: BASE_URL,
+              logo: `${BASE_URL}/favicon.svg`,
+              sameAs: [],
+            }),
+          }}
+        />
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              url: BASE_URL,
+              name: "Premium AI Directory",
+              potentialAction: {
+                "@type": "SearchAction",
+                target: `${BASE_URL}/tools?search={search_term_string}`,
+                "query-input": "required name=search_term_string",
+              },
+            }),
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         <Navbar />
 
@@ -136,10 +184,7 @@ export default function RootLayout({
                 </h3>
                 <ul className="mt-3 space-y-2">
                   <li>
-                    <Link
-                      href="/"
-                      className="text-sm text-gray-500 hover:text-gray-700"
-                    >
+                    <Link href="/about" className="text-sm text-gray-500 hover:text-gray-700">
                       About
                     </Link>
                   </li>
@@ -175,6 +220,14 @@ export default function RootLayout({
                       Terms of Service
                     </Link>
                   </li>
+                  <li>
+                    <Link
+                      href="/cookie-policy"
+                      className="text-sm text-gray-500 hover:text-gray-700"
+                    >
+                      Cookie Policy
+                    </Link>
+                  </li>
                 </ul>
               </div>
 
@@ -189,7 +242,7 @@ export default function RootLayout({
                   <input
                     type="email"
                     placeholder="you@example.com"
-                    className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="flex-1 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
                   />
                   <button
                     type="submit"

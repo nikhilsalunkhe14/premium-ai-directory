@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://premium-ai-directory-mu.vercel.app";
+
 export const metadata: Metadata = {
   title: "Privacy Policy | AI Directory",
   description: "Read our privacy policy for the AI Directory site, including data handling and user submission practices.",
+  keywords: ["privacy", "data", "cookie policy", "ai directory"],
+  openGraph: { images: [`${BASE_URL}/og-image.png`] },
+  twitter: { images: [`${BASE_URL}/og-image.png`] },
+  alternates: { canonical: `${BASE_URL}/privacy` },
+  robots: { index: true, follow: true },
 };
 
 export default function PrivacyPage() {

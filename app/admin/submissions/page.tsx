@@ -1,6 +1,7 @@
 import AdminSubmissionsList from "@/components/AdminSubmissionsList";
 import AdminToolsList from "@/components/AdminToolsList";
 import AdminLogoutButton from "@/components/AdminLogoutButton";
+import { AdminRealtimeProvider } from "@/components/AdminRealtimeProvider";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
@@ -20,27 +21,29 @@ export default async function AdminSubmissionsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 px-4 py-12">
-      <div className="mx-auto max-w-6xl space-y-8">
-        <div className="rounded-3xl bg-white p-8 shadow-lg shadow-slate-200/80">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h1 className="text-2xl font-semibold text-slate-900">Submissions Review</h1>
-              <p className="mt-2 text-sm text-slate-600">Approve or reject submitted tools before they go live.</p>
+    <AdminRealtimeProvider>
+      <div className="min-h-screen bg-slate-100 px-4 py-12">
+        <div className="mx-auto max-w-6xl space-y-8">
+          <div className="rounded-3xl bg-white p-8 shadow-lg shadow-slate-200/80">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h1 className="text-2xl font-semibold text-slate-900">Submissions Review</h1>
+                <p className="mt-2 text-sm text-slate-600">Approve or reject submitted tools before they go live.</p>
+              </div>
+              <div className="mt-2 md:mt-0">
+                <AdminLogoutButton />
+              </div>
             </div>
-            <div className="mt-2 md:mt-0">
-              <AdminLogoutButton />
+            <div className="mt-6">
+              <AdminSubmissionsList />
             </div>
           </div>
-          <div className="mt-6">
-            <AdminSubmissionsList />
-          </div>
-        </div>
 
-        <div className="rounded-3xl bg-white p-8 shadow-lg shadow-slate-200/80">
-          <AdminToolsList />
+          <div className="rounded-3xl bg-white p-8 shadow-lg shadow-slate-200/80">
+            <AdminToolsList />
+          </div>
         </div>
       </div>
-    </div>
+    </AdminRealtimeProvider>
   );
 }

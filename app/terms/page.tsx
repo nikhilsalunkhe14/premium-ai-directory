@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://premium-ai-directory-mu.vercel.app";
+
 export const metadata: Metadata = {
   title: "Terms of Service | AI Directory",
   description: "Review the terms of service for using the AI Directory website.",
+  keywords: ["terms of service", "tos", "ai directory"],
+  openGraph: { images: [`${BASE_URL}/og-image.png`] },
+  twitter: { images: [`${BASE_URL}/og-image.png`] },
+  alternates: { canonical: `${BASE_URL}/terms` },
+  robots: { index: true, follow: true },
 };
 
 export default function TermsPage() {

@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { getPublicToolBySlugOrId } from "@/lib/public-tools";
 import { MOCKUP_TOOLS } from "@/lib/mockup-tools";
+import { trackAnalyticsEvent } from "@/lib/analytics";
 
 const SUPABASE_URL = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -107,6 +108,15 @@ export async function GET(request: Request, context: { params: Promise<{ slug: s
       console.error("affiliate click record failed", e);
     }
   }
+
+  await trackAnalyticsEvent({
+    eventType: "outbound_click",
+    toolId: tool.id,
+    slug,
+    path: `/r/${slug}`,
+    referrer: request.headers.get("referer") || null,
+    metadata: { target },
+  });
 
   return NextResponse.redirect(target);
 }

@@ -5,6 +5,8 @@ import { getPublicToolBySlugOrId, getPublicTools } from "@/lib/public-tools";
 import { MOCKUP_TOOLS, type Tool } from "@/lib/mockup-tools";
 import ToolCard from "@/components/ToolCard";
 import AdBanner from "@/components/AdBanner";
+import { buildMetadata } from "@/lib/seo";
+import { trackAnalyticsEvent } from "@/lib/analytics";
 
 const CATEGORY_COLORS: Record<string, string> = {
   Writing: "bg-blue-100 text-blue-700",
@@ -36,19 +38,13 @@ export async function generateMetadata({
     return { title: "Tool Not Found" };
   }
 
-  return {
+  return buildMetadata({
     title: `${tool.name} Review - Features, Pricing, and Alternatives (2026)`,
     description: `Read our in-depth ${tool.name} review. Explore key features, pricing (${tool.pricing}), and discover top alternatives. Updated for 2026.`,
-    openGraph: {
-      title: `${tool.name} Review - Features, Pricing, and Alternatives (2026)`,
-      description: `Read our in-depth ${tool.name} review. Explore key features, pricing (${tool.pricing}), and discover top alternatives.`,
-      type: "article",
-    },
-    robots: {
-      index: true,
-      follow: true,
-    },
-  };
+    path: `/tool/${tool.id}`,
+    keywords: [tool.name, tool.category, "AI tools", "tool review"],
+    type: "article",
+  });
 }
 
 export default async function ToolProfilePage({

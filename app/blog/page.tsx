@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import GoogleAdsPlaceholder from "@/components/GoogleAdsPlaceholder";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: "Blog | AI Directory",
   description:
     "Stay up to date with the latest AI tools, trends, and tutorials. Read our guides on choosing the best AI apps for your workflow.",
-};
+  path: "/blog",
+  keywords: ["AI blog", "AI tools blog", "AI tutorials", "AI reviews", "AI guides"],
+});
 
 const POSTS = [
   {
@@ -15,6 +19,8 @@ const POSTS = [
       "We tested dozens of AI writing assistants to find the ones that actually deliver. Here are our top picks for bloggers, marketers, and students.",
     category: "Writing",
     date: "Jul 8, 2026",
+    updated: "Jul 9, 2026",
+    author: "AI Directory Editorial Team",
     readTime: "6 min read",
   },
   {
@@ -24,6 +30,8 @@ const POSTS = [
       "You don't need a design degree anymore. These AI tools generate stunning graphics, logos, and presentations from simple text prompts.",
     category: "Design",
     date: "Jul 5, 2026",
+    updated: "Jul 6, 2026",
+    author: "AI Directory Editorial Team",
     readTime: "5 min read",
   },
   {
@@ -33,6 +41,8 @@ const POSTS = [
       "An in-depth comparison of the two most popular AI coding assistants. We benchmark speed, accuracy, and developer experience.",
     category: "Coding",
     date: "Jul 1, 2026",
+    updated: "Jul 2, 2026",
+    author: "AI Directory Editorial Team",
     readTime: "8 min read",
   },
   {
@@ -42,6 +52,8 @@ const POSTS = [
       "From meeting transcription to automated scheduling, these AI tools will save you hours every week while working from home.",
     category: "Productivity",
     date: "Jun 28, 2026",
+    updated: "Jun 29, 2026",
+    author: "AI Directory Editorial Team",
     readTime: "5 min read",
   },
 ];
@@ -60,6 +72,10 @@ export default function BlogPage() {
         </div>
       </section>
 
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <GoogleAdsPlaceholder size="leaderboard" />
+      </div>
+
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid gap-8 sm:grid-cols-2">
           {POSTS.map((post) => (
@@ -68,7 +84,7 @@ export default function BlogPage() {
               href={`/blog/${post.slug}`}
               className="group rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:border-indigo-200 hover:shadow-md"
             >
-              <div className="flex items-center gap-3 text-sm text-gray-400">
+              <div className="flex flex-wrap items-center gap-3 text-sm text-gray-400">
                 <span className="rounded-full bg-indigo-50 px-3 py-0.5 font-medium text-indigo-600">
                   {post.category}
                 </span>
@@ -78,9 +94,13 @@ export default function BlogPage() {
               <h2 className="mt-3 text-xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">
                 {post.title}
               </h2>
-              <p className="mt-2 text-sm leading-relaxed text-gray-500">
+              <p className="mt-3 text-sm leading-relaxed text-gray-500">
                 {post.excerpt}
               </p>
+              <div className="mt-6 flex items-center justify-between text-xs text-gray-500">
+                <span>By {post.author}</span>
+                <span>Updated {post.updated}</span>
+              </div>
               <span className="mt-4 inline-block text-sm font-semibold text-indigo-600">
                 Read more &rarr;
               </span>

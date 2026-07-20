@@ -3,10 +3,21 @@ export const dynamic = "force-dynamic";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPublicToolBySlugOrId, getPublicTools } from "@/lib/public-tools";
+import { getPublicTools } from "@/lib/public-tools";
 import { MOCKUP_TOOLS, type Tool, sortToolsByPriority } from "@/lib/mockup-tools";
 import ToolCard from "@/components/ToolCard";
 import AdBanner from "@/components/AdBanner";
+import { BASE_URL, buildMetadata } from "@/lib/seo";
+import { trackAnalyticsEvent } from "@/lib/analytics";
+
+function isThenable<T>(value: unknown): value is Promise<T> {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "then" in value &&
+    typeof (value as { then: unknown }).then === "function"
+  );
+}
 
 const CATEGORY_COLORS: Record<string, string> = {
   Writing: "bg-blue-100 text-blue-700",
@@ -66,14 +77,11 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: { slug: string } | Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  // `params` may be a Promise-like value in some Next.js runtimes — unwrap safely
-  // to avoid "params is a Promise" errors during compilation.
-  // Accept either direct object or a thenable.
-  const resolvedParams: { slug: string } = (typeof (params as any)?.then === 'function')
-    ? await (params as any)
-    : (params as any);
+  const resolvedParams = isThenable<{ slug: string }>(params)
+    ? await params
+    : params;
 
   const tool = await getTool(resolvedParams.slug);
 
@@ -81,29 +89,23 @@ export async function generateMetadata({
     return { title: "Tool Not Found" };
   }
 
-  return {
+  return buildMetadata({
     title: `${tool.name} - Reviews, Features, and Pricing (2026)`,
     description: `Discover ${tool.name}. Explore its key features, pricing, categories, and best use cases in our curated AI tools directory.`,
-    openGraph: {
-      title: `${tool.name} - Reviews, Features, and Pricing (2026)`,
-      description: `Discover ${tool.name}. Explore its key features, pricing, categories, and best use cases in our curated AI tools directory.`,
-      type: "article",
-    },
-    robots: {
-      index: true,
-      follow: true,
-    },
-  };
+    path: `/tool/${tool.id}`,
+    keywords: [tool.name, tool.category, "AI tools", "AI directory"],
+    type: "article",
+  });
 }
 
 export default async function ToolPage({
   params,
 }: {
-  params: { slug: string };
+  params: { slug: string } | Promise<{ slug: string }>;
 }) {
-  const resolvedParams: { slug: string } = (typeof (params as any)?.then === 'function')
-    ? await (params as any)
-    : (params as any);
+  const resolvedParams = isThenable<{ slug: string }>(params)
+    ? await params
+    : params;
 
   const tool = await getTool(resolvedParams.slug);
   const allTools = await getAllTools();
@@ -121,6 +123,37 @@ export default async function ToolPage({
 
   return (
     <div className="bg-gray-50">
+      {/* JSON-LD structured data for the tool (SoftwareApplication and Breadcrumb) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            name: tool.name,
+            description: tool.description,
+            applicationCategory: tool.category,
+            operatingSystem: "Web",
+            url: `${BASE_URL}/tool/${tool.id}`,
+            image: `${BASE_URL}/og-image.png`,
+          }),
+        }}
+      />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: BASE_URL },
+              { "@type": "ListItem", position: 2, name: "Tools", item: `${BASE_URL}/tools` },
+              { "@type": "ListItem", position: 3, name: tool.name, item: `${BASE_URL}/tool/${tool.id}` },
+            ],
+          }),
+        }}
+      />
       <section className="border-b border-gray-200 bg-white">
         <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
           <Link
@@ -182,6 +215,7 @@ export default async function ToolPage({
               href={ctaUrl}
               target="_blank"
               rel="noopener noreferrer sponsored"
+              onClick={() => trackAnalyticsEvent({ eventType: "outbound_click", toolId: tool.id, slug: resolvedParams.slug, path: `/tool/${resolvedParams.slug}`, metadata: { category: tool.category } })}
               className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-indigo-200 transition-all hover:-translate-y-0.5 hover:bg-indigo-700 hover:shadow-xl"
             >
               Visit Website

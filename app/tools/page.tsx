@@ -5,12 +5,21 @@ import { MOCKUP_TOOLS, type Tool } from "@/lib/mockup-tools";
 import { getPublicTools } from "@/lib/public-tools";
 import ToolsGrid from "@/components/ToolsGrid";
 import AdBanner from "@/components/AdBanner";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: "Browse All AI Tools | AI Directory",
   description:
     "Browse our complete collection of AI tools across writing, design, coding, productivity, and more. Find the perfect AI app for your needs.",
-};
+  path: "/tools",
+  keywords: [
+    "AI tools",
+    "AI directory",
+    "free AI tools",
+    "AI apps",
+    "tool directory",
+  ],
+});
 
 async function fetchTools(): Promise<Tool[]> {
   const tools = await getPublicTools();

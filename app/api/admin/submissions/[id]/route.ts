@@ -32,6 +32,8 @@ function mapSubmissionToToolRow(submission: Record<string, any>) {
     description: String(submission.description ?? ""),
     pricing_type: String(submission.pricing ?? "Free"),
     tool_url: website || "https://example.com",
+    tags: Array.isArray(submission.tags) ? submission.tags : [],
+    affiliate_url: submission.affiliate_url ? String(submission.affiliate_url) : null,
   };
 }
 

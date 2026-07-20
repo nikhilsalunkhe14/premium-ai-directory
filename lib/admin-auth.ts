@@ -3,8 +3,8 @@ import crypto from "crypto";
 export const ADMIN_COOKIE_NAME = "admin_session";
 export const ADMIN_SESSION_MAX_AGE_SECONDS = 60 * 60 * 8;
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "";
-const ADMIN_SESSION_SECRET = process.env.ADMIN_SESSION_SECRET || "";
+const ADMIN_SECRET = process.env.ADMIN_SECRET || "";
+const ADMIN_SESSION_SECRET = process.env.ADMIN_SESSION_SECRET || ADMIN_SECRET;
 
 function getSecret() {
   if (!ADMIN_SESSION_SECRET) {
@@ -15,7 +15,7 @@ function getSecret() {
 }
 
 export function isAdminPasswordValid(password?: string) {
-  return Boolean(password && ADMIN_PASSWORD && password === ADMIN_PASSWORD);
+  return Boolean(password && ADMIN_SECRET && password === ADMIN_SECRET);
 }
 
 export function parseCookies(cookieHeader?: string) {
