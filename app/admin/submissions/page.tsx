@@ -2,6 +2,7 @@ import AdminSubmissionsList from "@/components/AdminSubmissionsList";
 import AdminToolsList from "@/components/AdminToolsList";
 import AdminLogoutButton from "@/components/AdminLogoutButton";
 import { AdminRealtimeProvider } from "@/components/AdminRealtimeProvider";
+import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
@@ -30,7 +31,13 @@ export default async function AdminSubmissionsPage() {
                 <h1 className="text-2xl font-semibold text-slate-900">Submissions Review</h1>
                 <p className="mt-2 text-sm text-slate-600">Approve or reject submitted tools before they go live.</p>
               </div>
-              <div className="mt-2 md:mt-0">
+              <div className="flex flex-wrap items-center gap-2 md:mt-0">
+                <Link
+                  href="/admin/dashboard"
+                  className="rounded-2xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
+                >
+                  Admin Dashboard
+                </Link>
                 <AdminLogoutButton />
               </div>
             </div>
