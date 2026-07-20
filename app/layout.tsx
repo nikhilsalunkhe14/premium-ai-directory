@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
+import AdConsent from "@/components/AdConsent";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -122,6 +123,7 @@ export default function RootLayout({
         <Navbar />
 
         <main className="flex-1">{children}</main>
+        <AdConsent />
 
         <footer className="border-t border-gray-200 bg-gray-50">
           <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
