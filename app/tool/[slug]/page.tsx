@@ -8,7 +8,7 @@ import { MOCKUP_TOOLS, type Tool, sortToolsByPriority } from "@/lib/mockup-tools
 import ToolCard from "@/components/ToolCard";
 import AdBanner from "@/components/AdBanner";
 import { BASE_URL, buildMetadata } from "@/lib/seo";
-import { trackAnalyticsEvent } from "@/lib/analytics";
+import VisitButton from "@/components/VisitButton";
 
 function isThenable<T>(value: unknown): value is Promise<T> {
   return (
@@ -211,15 +211,15 @@ export default async function ToolPage({
                     : "Paid Plan"}
               </span>
             </div>
-            <a
+            <VisitButton
               href={ctaUrl}
-              target="_blank"
-              rel="noopener noreferrer sponsored"
-              onClick={() => trackAnalyticsEvent({ eventType: "outbound_click", toolId: tool.id, slug: resolvedParams.slug, path: `/tool/${resolvedParams.slug}`, metadata: { category: tool.category } })}
+              toolId={tool.id}
+              slug={resolvedParams.slug}
+              path={`/tool/${resolvedParams.slug}`}
               className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-indigo-200 transition-all hover:-translate-y-0.5 hover:bg-indigo-700 hover:shadow-xl"
             >
               Visit Website
-            </a>
+            </VisitButton>
           </div>
         </div>
       </section>
